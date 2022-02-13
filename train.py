@@ -56,7 +56,7 @@ def train(model, game, epsilon, step, Deque, highest_score,
                     action_index = random.randrange(ACTIONS)
                     a_t[action_index] = 1
                 else:
-                    q = model.predict(s_t) #input a stack of 4 images, get the prediction
+                    q = model(s_t) #input a stack of 4 images, get the prediction
                     max_Q = np.argmax(q)
                     action_index = max_Q 
                     a_t[action_index] = 1 # set the action's prediction to 1
