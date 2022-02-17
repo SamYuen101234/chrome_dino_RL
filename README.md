@@ -15,6 +15,10 @@ If you are not familar with Q-learing, you can visit a more fundamental project,
 The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur.
 
 ### Baseline DQN
+[Paper: Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)
+[Paper: Prioritized Experience Replay](https://arxiv.org/pdf/1511.05952.pdf)
+[Paper: Self-Improving Reactive Agents Based On Reinforcement Learning, Planning and Teaching ](https://link.springer.com/content/pdf/10.1007%2FBF00992699.pdf)
+[Link: Original implementation in Keras](https://github.com/Paperspace/DinoRunTutorial)
 
 ### Double DQN
 
