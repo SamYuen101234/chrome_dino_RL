@@ -1,4 +1,4 @@
-# The most detailed experiments and explaination of Chrome dinosaur on GitHub
+# The most detailed experiments and explaination of Chrome dinosaur in Deep Reinforcement Learning on GitHub
 
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning. In this repository, I will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
