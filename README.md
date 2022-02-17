@@ -2,7 +2,7 @@
 
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning. In this repository, I will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
-* [Baseline DQN](#Baseline DQN) 
+* [Baseline DQN](#Baseline-DQN) 
 * Double DQN 
 * Rainbow
 * Policy gradient
