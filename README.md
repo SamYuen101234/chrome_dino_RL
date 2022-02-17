@@ -12,7 +12,7 @@ I have also implemented a real-time browser demo here.
 If you are not familar with Q-learing, you can visit a more fundamental project, Q-learning for Tic-Tac-Toe (GitHub Repo) and the real-time interactive streamlit demo.
 
 
-The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur,
+The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur.
 
 ### Baseline DQN
 
