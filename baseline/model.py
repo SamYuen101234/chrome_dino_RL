@@ -1,12 +1,5 @@
-
-from distutils.command.build import build
 import torch.nn as nn
-import torchvision
-import timm
-import torch
-from typing import Tuple, Optional
 
-import torch.nn.functional as F
 
 def buildmodel(img_channels, ACTIONS):
     model = nn.Sequential(
