@@ -23,3 +23,5 @@ The following is a detailed explaination of each approach and their environment 
 ### Policy Gradient
 
 ### Actor-Critic Algorithms
+
+[!Actor-Critic Algorithms](https://papers.nips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)
