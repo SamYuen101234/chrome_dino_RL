@@ -1,6 +1,6 @@
 # The most detailed experiments and explaination of Chrome dinosaur in Deep Reinforcement Learning on GitHub
 
-Chome dinosaur is a game very suitable for beginners in deep reinforcement learning. In this repository, I will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
+Chome dinosaur is a game very suitable for beginners in deep reinforcement learning because of its easy rules and environment setting. Although the game is easy for human but it is difficult for computer agent to learning it. Through this project, I will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
 * [Baseline DQN](#Baseline-DQN) 
 * [Double DQN](Double-DQN)
