@@ -11,6 +11,7 @@ import torch.nn as nn
 from torch import optim
 
 # run with: python3 main.py -c config1
+# turn on the cloud log: tensorboard dev upload --logdir runs
 if __name__ == '__main__':
     log_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     #tb_writer = tf.summary.create_file_writer(log_dir)
@@ -21,11 +22,11 @@ if __name__ == '__main__':
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     print("Device:",device)
     DQN_agent.to(device)
-    criterion = nn.MSELoss()
-    optimizer = optim.AdamW(DQN_agent.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    criterion = nn.SmoothL1Loss() # we follow pytorch example to use smoothL1Loss not MSE
+    optimizer = optim.Adam(DQN_agent.parameters(), lr=args.lr)
 
     if args.train == 'train': # train a model from scratch
-        init_cache(args.INITIAL_EPSILON) # create a pkl to save the epsilon, current step
+        init_cache(args.INITIAL_EPSILON, args.REPLAY_MEMORY) # create a pkl to save the epsilon, current step
     else: # continue training a model or ask the agent to play
         print ("Now we load weight")
         #DQN_agent.load_weights(args.checkpoint) # load the model to continue training or play
@@ -39,11 +40,11 @@ if __name__ == '__main__':
         OBSERVE = float('inf')
             
     game.screen_shot()
-    train = trainNetwork(DQN_agent, game, optimizer, criterion, writer, device)
-    train.start(epsilon, step, Deque, highest_score, 
-            OBSERVE, args.ACTIONS, args.INITIAL_EPSILON, args.FINAL_EPSILON, 
-            args.GAMMA, args.FRAME_PER_ACTION, args.EXPLORE, args.EPISODE, 
-            args.SAVE_EVERY, args.BATCH, args.REPLAY_MEMORY) # observe = False (training)
+    train = trainNetwork(DQN_agent, game, optimizer, criterion, writer, Deque, args.BATCH, device)
+    train.start(epsilon, step, highest_score, 
+            OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
+            args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
+            args.SAVE_EVERY)
 
     game.end()
     print("Exit")
