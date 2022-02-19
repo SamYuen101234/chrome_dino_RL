@@ -17,20 +17,20 @@ args = {
     # hypyerparameter
     "EPISODE": 50000,
     "ACTIONS": 2, # possible actions: jump, duck () and do nothing
-    "GAMMA": 0.99, # decay rate of past observations original 0.99
-    "OBSERVATION": 100, # timesteps to observe before training
+    "GAMMA": 0.9, # decay rate of past observations original 0.99
+    "OBSERVATION": 5000, # timesteps to observe before training
     "EXPLORE": 100000,  # frames over which to anneal epsilon
     "FINAL_EPSILON": 0.0001, # final value of epsilon
-    "INITIAL_EPSILON": 0.1, # starting value of epsilon (initial randomness)
-    "REPLAY_MEMORY": 10000, # number of previous transitions to remember
-    "BATCH": 16, # size of minibatch
+    "INITIAL_EPSILON": 0.5, # starting value of epsilon (initial randomness)
+    "EPSILON_DECAY": 0.999995,
+    "REPLAY_MEMORY": 25000, # number of previous transitions to remember
+    "BATCH": 256, # size of minibatch
     "FRAME_PER_ACTION": 1,
     "img_rows": 80,
     "img_cols": 80,
     "img_channels": 4, #We stack 4 frames
-    "lr": 1e-4,
+    "lr": 0.00025,
     "weight_decay": 0,
-    "dropout": 0.2,
     "model": None,   # 'resnet' for resnet 18 model or None for customized model
     "checkpoint" : "./model/model.pth",
     "SAVE_EVERY": 100000
