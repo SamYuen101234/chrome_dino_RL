@@ -21,9 +21,9 @@ args = {
     "OBSERVATION": 5000, # timesteps to observe before training
     "EXPLORE": 100000,  # frames over which to anneal epsilon
     "FINAL_EPSILON": 0.0001, # final value of epsilon
-    "INITIAL_EPSILON": 0.2, # starting value of epsilon (initial randomness)
-    "EPSILON_DECAY": 0.999995,
-    "REPLAY_MEMORY": 50000, # number of previous transitions to remember
+    "INITIAL_EPSILON": 0.3, # starting value of epsilon (initial randomness)
+    "EPSILON_DECAY": 0.9999975,
+    "REPLAY_MEMORY": 100000, # number of previous transitions to remember
     "BATCH": 256, # size of minibatch
     "FRAME_PER_ACTION": 1,
     "img_rows": 80,
@@ -33,5 +33,6 @@ args = {
     "weight_decay": 0,
     "model": None,   # 'resnet' for resnet 18 model or None for customized model
     "checkpoint" : "./model/model.pth",
-    "SAVE_EVERY": 100000
+    "SAVE_EVERY": 100000,
+    "SYNC_EVERY": 1e4   # no. of experiences between Q_target & Q_online sync
 }
