@@ -26,7 +26,7 @@ class Game():
         # print(self.driver.get_window_size()) # print the size of browser
         self.driver.set_window_size(1450, 1080)
         self.driver.get(game_url)
-        self.driver.execute_script("Runner.config.ACCELERATION=0") # no ACCELERATION for the game
+        self.driver.execute_script("Runner.config.ACCELERATION=0") # no ACCELERATION and birds for the game, easy mode, 
         time.sleep(1) # wait the html
         self.driver.execute_script(init_script) # set id for the canvas
         self.CV_display = self.show_img()  # show the state using opencv instead of the browser
@@ -41,7 +41,7 @@ class Game():
         #np_img = np_img.save('./img/'+str(i)+'.png')
         return np_img
 
-    def show_img(graphs = False):
+    def show_img(self, graphs = False):
         while True:
             screen = (yield)
             window_title = "logs" if graphs else "game_play"
@@ -65,14 +65,12 @@ class Game():
         if self.get_crashed():
             reward = -1
             is_over = True
+        
         return image, reward, is_over #return the Experience tuple
 
     '''def get_score(self):
         return self.driver.execute_script("Runner.instance_.distanceMeter.getActualDistance\
                                           (Math.ceil(Runner.instance_.distanceRan));")'''
-
-    def pass_obstacle(self):
-        pass
 
     def get_crashed(self):
         return self.driver.execute_script("return Runner.instance_.crashed")
