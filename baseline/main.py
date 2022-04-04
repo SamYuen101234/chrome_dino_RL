@@ -1,18 +1,36 @@
 from game import Game
 import datetime
-from conf import *
-#import tensorflow as tf 
-from model import buildmodel
-from train import trainNetwork, init_cache, load_obj
-#from tensorflow.keras.optimizers import Adam
-from torch.utils.tensorboard import SummaryWriter
+import sys
+import importlib
+import argparse
 import torch
 import torch.nn as nn
+
+from types import SimpleNamespace
 from torch import optim
+from torch.utils.tensorboard import SummaryWriter
+
+from model import buildmodel
+from train import trainNetwork, init_cache, load_obj
+
+def parse_args():
+    # import config 
+    sys.path.append("config")
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument("-c", "--config", help="config filename")
+    parser_args, _ = parser.parse_known_args(sys.argv)
+    print("Using config file", parser_args.config)
+    args = importlib.import_module(parser_args.config).args
+    args["experiment_name"] = parser_args.config
+    args =  SimpleNamespace(**args)
+
+    return args
 
 # run with: python3 main.py -c config1
 # turn on the cloud log: tensorboard dev upload --logdir runs
 if __name__ == '__main__':
+    args = parse_args()
+
     log_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     #tb_writer = tf.summary.create_file_writer(log_dir)
     writer = SummaryWriter(comment=log_dir)
