@@ -8,6 +8,8 @@ import base64
 import numpy as np
 import cv2
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 class Game():
     def __init__(self, game_url, chrome_driver_path, init_script):
@@ -18,7 +20,8 @@ class Game():
         chrome_options.add_argument('headless') # not showing browser is faster
         chrome_options.add_argument("disable-infobars")
         chrome_options.add_argument("--mute-audio")
-        self.driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+        # self.driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+        self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.set_window_position(x=-10,y=0)
         # print(self.driver.get_window_size()) # print the size of browser
         self.driver.set_window_size(1450, 1080)
@@ -63,11 +66,6 @@ class Game():
             reward = -1
             is_over = True
         return image, reward, is_over #return the Experience tuple
-    #  Runner.instance_.horizon.obstacles
-    #  Runner.instance_.runningTime > Runner.instance_.config.CLEAR_TIME # true if obstacle
-
-    # check pass the obstacle
-    # console.log(Runner.instance_.horizon.obstacles[0].xPos+1 + (Runner.instance_.horizon.obstacles[0].typeConfig.width*Runner.instance_.horizon.obstacles[0].size-2), Runner.instance_.tRex.xPos+1+Runner.instance_.tRex.config.WIDTH-2)
 
     '''def get_score(self):
         return self.driver.execute_script("Runner.instance_.distanceMeter.getActualDistance\

@@ -8,6 +8,8 @@ import base64
 import numpy as np
 import cv2
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 class Game():
     def __init__(self, game_url, chrome_driver_path, init_script):
@@ -18,7 +20,8 @@ class Game():
         chrome_options.add_argument('headless') # not showing browser is faster
         chrome_options.add_argument("disable-infobars")
         chrome_options.add_argument("--mute-audio")
-        self.driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+        # self.driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+        self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.set_window_position(x=-10,y=0)
         # print(self.driver.get_window_size()) # print the size of browser
         self.driver.set_window_size(1450, 1080)
@@ -67,6 +70,10 @@ class Game():
     '''def get_score(self):
         return self.driver.execute_script("Runner.instance_.distanceMeter.getActualDistance\
                                           (Math.ceil(Runner.instance_.distanceRan));")'''
+
+    def pass_obstacle(self):
+        pass
+    
     def get_crashed(self):
         return self.driver.execute_script("return Runner.instance_.crashed")
     def get_playing(self):
