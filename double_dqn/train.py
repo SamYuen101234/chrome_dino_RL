@@ -95,9 +95,6 @@ class trainNetwork:
     def save(self):
         pass
 
-    
-
-
     def start(self, epsilon, step, highest_score, 
             OBSERVE, ACTIONS, EPSILON_DECAY, FINAL_EPSILON, GAMMA,
             FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY):
