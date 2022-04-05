@@ -97,7 +97,7 @@ class trainNetwork:
 
     def start(self, epsilon, step, highest_score, 
             OBSERVE, ACTIONS, EPSILON_DECAY, FINAL_EPSILON, GAMMA,
-            FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY):
+            FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY, TRAIN_EVERY):
         last_time = time.time() # for computing fps
         current_episode = 0
         num_action_0 = 0
@@ -136,9 +136,10 @@ class trainNetwork:
                         action_idx = np.random.randint(ACTIONS)
                         a_t[action_idx] = 1
                     else:
-                        with torch.no_grad():
-                            action_values = self.model(s_t.to(self.device), model="online") # input a stack of 4 images, get the prediction
-                        action_idx = torch.argmax(action_values).item()
+                        # with torch.no_grad():
+                        #     action_values = self.model(s_t.to(self.device)) # input a stack of 4 images, get the prediction
+                        # action_idx = torch.argmax(action_values)
+                        action_idx = self.model.get_action(s_t)
                         a_t[action_idx] = 1 # set the action's prediction to 1
 
                 if action_idx == 0:
@@ -158,7 +159,6 @@ class trainNetwork:
                 s_t1 = torch.from_numpy(s_t1)
                 
                 # store the transition (experience tuple) in a deque for experience replay
-                #if time.time()-start_time > 3:
                 self.cache(s_t, action_idx, r_t, s_t1, terminal)
                 
                 # only train for train =='train' or 'continue_train'
@@ -167,30 +167,16 @@ class trainNetwork:
                     epsilon *= EPSILON_DECAY
                     epsilon = max(FINAL_EPSILON, epsilon)
 
-                    
                     #sample a minibatch to train
                     state_t, action_t, reward_t, state_t1, terminal = self.recall()
                     #td_target = torch.zeros((self.batch_size, ACTIONS)) # (batch_size, 2)
                     
                     if step % SYNC_EVERY == 0:
-                        self.model.sync_Q_target()
+                        self.model.sync_target()
 
-                    if step % 3 == 0:
-                        # td_estimate/current Q
-                        td_est = self.model(state_t.to(self.device), model='online')[
-                            np.arange(0, self.batch_size), action_t
-                        ]  # Q_online(s,a)
-
-                        # td_target
-                        with torch.no_grad():
-                            next_state_Q = self.model(state_t1.to(self.device), model='online')
-                            best_action = torch.argmax(next_state_Q, axis=1)
-                            next_Q = self.model(state_t1, model="target")[
-                                np.arange(0, self.batch_size), best_action
-                            ]
-                            td_tgt = (reward_t + (1 - terminal.float())*GAMMA *next_Q).float()
-
-                        loss = self.criterion(td_est.to(self.device), td_tgt.to(self.device))
+                    if step % TRAIN_EVERY:
+                        td_estimate, td_target, next_Q = self.model.step(state_t, action_t, reward_t, state_t1, terminal, GAMMA)
+                        loss = self.criterion(td_estimate.to(self.device), td_target.to(self.device))
                         self.optimizer.zero_grad()
                         loss.backward()
                         self.optimizer.step()
