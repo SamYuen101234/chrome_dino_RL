@@ -7,6 +7,7 @@ import numpy as np
 
 class ChromeDinoAgent(nn.Module):
     def __init__(self):
+        super().__init__()
         pass
 
     def sync_target(self):
@@ -59,7 +60,7 @@ class Baseline(ChromeDinoAgent):
 
         return td_estimate, td_target, next_Q
 
-class DinosaurNet(ChromeDinoAgent):
+class DoubleDQN(ChromeDinoAgent):
     def __init__(self, img_channels, ACTIONS):
         super().__init__()
         '''self.online = nn.Sequential(

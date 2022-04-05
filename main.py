@@ -1,4 +1,5 @@
-from game import Game
+from multiprocessing.sharedctypes import Value
+from utils.game import Game
 import datetime
 import sys
 import importlib
@@ -10,12 +11,20 @@ from types import SimpleNamespace
 from torch import optim
 from torch.utils.tensorboard import SummaryWriter
 
-from model import buildmodel
-from train import trainNetwork, init_cache, load_obj
+from models.model import Baseline, DoubleDQN
+from models.train import trainNetwork, init_cache, load_obj
+
+def get_agent(algo):
+    if algo == "Baseline":
+        return Baseline
+    elif algo == "DoubleDQN":
+        return DoubleDQN
+    else:
+        raise ValueError
 
 def parse_args():
     # import config 
-    sys.path.append("config")
+    # sys.path.append("config")
     parser = argparse.ArgumentParser(description='')
     parser.add_argument("-c", "--config", help="config filename")
     parser_args, _ = parser.parse_known_args(sys.argv)
@@ -35,7 +44,8 @@ if __name__ == '__main__':
     #tb_writer = tf.summary.create_file_writer(log_dir)
     writer = SummaryWriter(comment=log_dir)
     game = Game(args.game_url, args.chrome_driver_path, args.init_script)
-    DQN_agent = buildmodel( args.img_channels, args.ACTIONS)
+    agent = get_agent(args.algorithm)
+    DQN_agent = agent(args.img_channels, args.ACTIONS)
     # training the DQN agent
     #device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
     device = torch.device('cpu')
@@ -65,7 +75,7 @@ if __name__ == '__main__':
     train.start(epsilon, step, highest_score, 
             OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
             args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
-            args.SAVE_EVERY, args.SYNC_EVERY)
+            args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY)
 
     game.end()
     print("Exit")
