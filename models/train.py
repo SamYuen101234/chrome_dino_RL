@@ -41,11 +41,9 @@ class AverageMeter:
         self.avg = self.sum / self.count
 
 class trainNetwork:
-    def __init__(self,model,game, optimizer, criterion, writer, Deque, BATCH, device):
-        self.model = model
+    def __init__(self, agent,game, writer, Deque, BATCH, device):
+        self.agent = agent
         self.game = game
-        self.optimizer = optimizer
-        self.criterion = criterion
         self.device = device
         self.writer = writer
         self.memory = Deque
@@ -136,10 +134,7 @@ class trainNetwork:
                         action_idx = np.random.randint(ACTIONS)
                         a_t[action_idx] = 1
                     else:
-                        # with torch.no_grad():
-                        #     action_values = self.model(s_t.to(self.device)) # input a stack of 4 images, get the prediction
-                        # action_idx = torch.argmax(action_values)
-                        action_idx = self.model.get_action(s_t)
+                        action_idx = self.agent.get_action(s_t)
                         a_t[action_idx] = 1 # set the action's prediction to 1
 
                 if action_idx == 0:
@@ -172,24 +167,21 @@ class trainNetwork:
                     #td_target = torch.zeros((self.batch_size, ACTIONS)) # (batch_size, 2)
                     
                     if step % SYNC_EVERY == 0:
-                        self.model.sync_target()
+                        self.agent.sync_target()
 
-                    if step % TRAIN_EVERY:
-                        td_estimate, td_target, next_Q = self.model.step(state_t, action_t, reward_t, state_t1, terminal, GAMMA)
-                        loss = self.criterion(td_estimate.to(self.device), td_target.to(self.device))
-                        self.optimizer.zero_grad()
-                        loss.backward()
-                        self.optimizer.step()
+                    if step % TRAIN_EVERY == 0:
+                        loss, avg_q_max= self.agent.step(state_t, action_t, reward_t, state_t1, terminal)
+                        
                         # record the log
-                        avg_loss.update(loss.detach().cpu().item(), self.batch_size)
-                        avg_Q_max.update(torch.mean(torch.amax(next_Q)).detach().cpu().item(), self.batch_size)
+                        avg_loss.update(loss, self.batch_size)
+                        avg_Q_max.update(avg_q_max, self.batch_size)
                         self.writer.add_scalar("Train/loss", avg_loss.avg, step)
                     
                     # save model
                     if step % SAVE_EVERY == 0:
                         self.game.pause() #pause game while saving to filesystem
                         print("Now we save model")
-                        torch.save(self.model, "./model/model.pth")
+                        self.agent.save_model()
                         set_up_dict = {"epsilon": epsilon, "step": step, "D": self.memory, "highest_score": highest_score}
                         save_obj(set_up_dict, "set_up")
                         self.game.resume()
