@@ -2,7 +2,7 @@ from multiprocessing.sharedctypes import Value
 from utils.game import Game
 import datetime
 import sys
-import importlib
+import yaml
 import argparse
 import torch
 import torch.nn as nn
@@ -11,7 +11,7 @@ from types import SimpleNamespace
 from torch import optim
 from torch.utils.tensorboard import SummaryWriter
 
-from models.model import Baseline, DoubleDQN
+from models import Baseline, DoubleDQN
 from models.train import trainNetwork, init_cache, load_obj
 
 def get_dino_agent(algo):
@@ -31,9 +31,9 @@ def parse_args():
     parser.add_argument("-c", "--config", help="config filename")
     parser_args, _ = parser.parse_known_args(sys.argv)
     print("Using config file", parser_args.config)
-    args = importlib.import_module(parser_args.config).args
-    args["experiment_name"] = parser_args.config
-    args =  SimpleNamespace(**args)
+    with open(parser_args.config + ".yaml", "r") as cfg:
+        data = yaml.safe_load(cfg)
+    args =  SimpleNamespace(**data)
 
     return args
 
@@ -52,9 +52,6 @@ if __name__ == '__main__':
     device = torch.device('cpu')
     agent = DinoAgent(args.img_channels, args.ACTIONS, args.lr, args.BATCH, args.GAMMA, device)
     print("Device:",device)
-
-    # criterion = nn.SmoothL1Loss() # we follow pytorch example to use smoothL1Loss not MSE
-    # optimizer = optim.Adam(DQN_agent.parameters(), lr=args.lr)
 
     if args.train == 'train': # train a model from scratch
         init_cache(args.INITIAL_EPSILON, args.REPLAY_MEMORY) # create a pkl to save the epsilon, current step
