@@ -1,5 +1,9 @@
 # Quick Start
-1. `mkdir result`
+1. 
+```
+mkdir result
+mkdir weights
+```
 2. 
 ```py
 python3 main.py -c config1
