@@ -1,10 +1,11 @@
-import tensorflow as tf
+# import tensorflow as tf
 from tqdm import tqdm
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
 # load the log file
+#summaries = tf.compat.v1.train.summary_iterator('/home/samyuen/Desktop/vscode/chrome_dino_training/double_dqn/runs/Mar29_14-00-48_samyuen-System-Product-Name20220329-140048/events.out.tfevents.1648533648.samyuen-System-Product-Name.2917626.0')
 summaries = tf.compat.v1.train.summary_iterator('/home/samyuen/Desktop/vscode/chrome_dino_training/double_dqn/runs/Apr03_23-07-33_samyuen-System-Product-Name20220403-230733/events.out.tfevents.1648998454.samyuen-System-Product-Name.1904013.0')
 scores = []
 

@@ -1,3 +1,10 @@
+# Quick Start
+1. `mkdir result`
+2. 
+```py
+python3 main.py -c config1
+```
+
 # The most detailed experiments and explaination of Chrome dinosaur in Deep Reinforcement Learning on GitHub
 
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning because of its easy rules and environment setting. Although the game is easy for human but it is difficult for computer agent to learning it. Through this project, We will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.

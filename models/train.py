@@ -7,6 +7,7 @@ import random
 import torch
 import copy
 
+
 def init_cache(INITIAL_EPSILON, REPLAY_MEMORY):
     """initial variable caching, done only once"""
     t, D = 0, deque(maxlen=REPLAY_MEMORY) # for experience replay
@@ -40,11 +41,9 @@ class AverageMeter:
         self.avg = self.sum / self.count
 
 class trainNetwork:
-    def __init__(self,model,game, optimizer, criterion, writer, Deque, BATCH, device):
-        self.model = model
+    def __init__(self, agent,game, writer, Deque, BATCH, device):
+        self.agent = agent
         self.game = game
-        self.optimizer = optimizer
-        self.criterion = criterion
         self.device = device
         self.writer = writer
         self.memory = Deque
@@ -65,6 +64,7 @@ class trainNetwork:
 
         self.memory.append((state, action_idx, reward, next_state, terminal))
 
+
     def recall(self):
         """
         Retrieve a batch of experiences from memory
@@ -77,9 +77,25 @@ class trainNetwork:
         terminal = torch.squeeze(terminal)
         return state.to(self.device), action_idx.to(self.device), reward.to(self.device), next_state.to(self.device), terminal.to(self.device)
 
+    def td_estimate(self, state, action):
+        pass
+
+    @torch.no_grad()
+    def td_target(self, reward, next_state, done):
+        pass
+
+    def update_Q_online(self, td_estimate, td_target):
+        pass
+    
+    def sync_Q_target(self):
+        pass
+
+    def save(self):
+        pass
+
     def start(self, epsilon, step, highest_score, 
             OBSERVE, ACTIONS, EPSILON_DECAY, FINAL_EPSILON, GAMMA,
-            FRAME_PER_ACTION, EPISODE, SAVE_EVERY):
+            FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY, TRAIN_EVERY):
         last_time = time.time() # for computing fps
         current_episode = 0
         num_action_0 = 0
@@ -100,10 +116,12 @@ class trainNetwork:
         s_t = s_t.reshape(1, s_t.shape[2], s_t.shape[0], s_t.shape[1])  #1*4*80*80
         s_t = torch.from_numpy(s_t).float()
         initial_state = copy.deepcopy(s_t)
-        
+
         while current_episode < EPISODE:
             total_reward = 0
+            start_time = time.time()
             while not self.game.get_crashed(): # not game over yet
+                time.sleep(.03) # make the fps lower for small batch number
                 loss = torch.zeros(1)
                 Q_sa = torch.zeros((1,2))
                 action_idx = 0
@@ -112,16 +130,18 @@ class trainNetwork:
             
                 # if the sample is smaller than epsilon, we perform random action
                 if step % FRAME_PER_ACTION == 0: # perform action every n frames
-                    if random.random() < epsilon:
-                        action_idx = random.randrange(ACTIONS)
+                    if np.random.rand() < epsilon:
+                        action_idx = np.random.randint(ACTIONS)
                         a_t[action_idx] = 1
                     else:
-                        with torch.no_grad():
-                            action_values = self.model(s_t.to(self.device)) # input a stack of 4 images, get the prediction
-                        action_idx = torch.argmax(action_values)
+                        action_idx = self.agent.get_action(s_t)
                         a_t[action_idx] = 1 # set the action's prediction to 1
-                num_action_0 += 1 if not action_idx else action_idx
-                num_action_1 += action_idx if action_idx else 0
+
+                if action_idx == 0:
+                    num_action_0 += 1
+                else:
+                    num_action_1 += 1
+
                 # perform the action, and observe next state and receive reward
                 x_t1, r_t, terminal = self.game.get_state(a_t)
                 total_reward += r_t
@@ -144,37 +164,31 @@ class trainNetwork:
 
                     #sample a minibatch to train
                     state_t, action_t, reward_t, state_t1, terminal = self.recall()
-                    #td_estimate = torch.zeros((self.memory, s_t.shape[1], s_t.shape[2], s_t.shape[3])) 
-                    td_target = torch.zeros((self.batch_size, ACTIONS)) # (batch_size, 2)
+                    #td_target = torch.zeros((self.batch_size, ACTIONS)) # (batch_size, 2)
                     
-                    # td_target/current_Q
-                    td_estimate = self.model(state_t.to(self.device))
-                    with torch.no_grad():
-                        td_target = self.model(state_t.to(self.device))
-                        next_Q = self.model(state_t1.to(self.device)) # Q_sa
-                        td_target[torch.arange(len(td_target)), action_t] = \
-                        (reward_t + (1 - terminal.float())*GAMMA *torch.amax(next_Q, axis=1)).float() # put a mask on the action_t
-                    
-                    loss = self.criterion(td_estimate.to(self.device), td_target.to(self.device))
-                    self.optimizer.zero_grad()
-                    loss.backward()
-                    self.optimizer.step()
-                    # record the log
-                    avg_loss.update(loss.detach().cpu().item(), self.batch_size)
-                    avg_Q_max.update(torch.mean(torch.amax(next_Q)).detach().cpu().item(), self.batch_size)
-                    self.writer.add_scalar("Train/loss", avg_loss.avg, step)
+                    if step % SYNC_EVERY == 0:
+                        self.agent.sync_target()
+
+                    if step % TRAIN_EVERY == 0:
+                        loss, avg_q_max= self.agent.step(state_t, action_t, reward_t, state_t1, terminal)
+                        
+                        # record the log
+                        avg_loss.update(loss, self.batch_size)
+                        avg_Q_max.update(avg_q_max, self.batch_size)
+                        self.writer.add_scalar("Train/loss", avg_loss.avg, step)
                     
                     # save model
                     if step % SAVE_EVERY == 0:
                         self.game.pause() #pause game while saving to filesystem
                         print("Now we save model")
-                        torch.save(self.model, "./model/model.pth")
+                        self.agent.save_model()
                         set_up_dict = {"epsilon": epsilon, "step": step, "D": self.memory, "highest_score": highest_score}
                         save_obj(set_up_dict, "set_up")
                         self.game.resume()
                 
                 s_t = copy.deepcopy(s_t1) # assign next state to current state
                 step += 1
+                
             
             # update the log after the end of each episode
             current_episode += 1
