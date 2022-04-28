@@ -1,4 +1,4 @@
-from turtle import forward
+#from turtle import forward
 import torch.nn as nn
 import torch
 import copy
@@ -111,7 +111,7 @@ class DoubleDQN(ChromeDinoAgent):
         self.target.load_state_dict(self.online.state_dict())
 
     def save_model(self):
-        torch.save(self.model, "./weights/double_dqn.pth")
+        torch.save(self.online, "./weights/double_dqn.pth")
 
     def get_action(self, state):
         with torch.no_grad():

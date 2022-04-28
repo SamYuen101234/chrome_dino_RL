@@ -21,7 +21,7 @@ class Game():
         chrome_options.add_argument("disable-infobars")
         chrome_options.add_argument("--mute-audio")
         # self.driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
-        self.driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
         self.driver.set_window_position(x=-10,y=0)
         # print(self.driver.get_window_size()) # print the size of browser
         self.driver.set_window_size(1450, 1080)

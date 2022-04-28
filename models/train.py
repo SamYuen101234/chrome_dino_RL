@@ -43,6 +43,8 @@ class AverageMeter:
 class trainNetwork:
     def __init__(self, agent,game, writer, Deque, BATCH, device):
         self.agent = agent
+        self.agent.online.to(device)
+        self.agent.target.to(device)
         self.game = game
         self.device = device
         self.writer = writer
@@ -170,7 +172,7 @@ class trainNetwork:
                         self.agent.sync_target()
 
                     if step % TRAIN_EVERY == 0:
-                        loss, avg_q_max= self.agent.step(state_t, action_t, reward_t, state_t1, terminal)
+                        loss, avg_q_max= self.agent.step(state_t.to(self.device), action_t.to(self.device), reward_t.to(self.device), state_t1.to(self.device), terminal.to(self.device))
                         
                         # record the log
                         avg_loss.update(loss, self.batch_size)

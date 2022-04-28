@@ -1,4 +1,5 @@
 from multiprocessing.sharedctypes import Value
+import os
 from utils.game import Game
 import datetime
 import sys
@@ -42,14 +43,22 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
+    # create a log folder for tensorboard
+    if not os.path.isdir('runs'):
+        os.makedirs('runs')
+
+    # create a folder to save the buffer, epsilon for continuous training
+    if not os.path.isdir('result'):
+        os.makedirs('result')
+
     log_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     #tb_writer = tf.summary.create_file_writer(log_dir)
     writer = SummaryWriter(comment=log_dir)
     game = Game(args.game_url, args.chrome_driver_path, args.init_script)
     DinoAgent = get_dino_agent(args.algorithm)
     # training the DQN agent
-    #device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
-    device = torch.device('cpu')
+    device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+    #device = torch.device('cpu')
     agent = DinoAgent(args.img_channels, args.ACTIONS, args.lr, args.BATCH, args.GAMMA, device)
     print("Device:",device)
 

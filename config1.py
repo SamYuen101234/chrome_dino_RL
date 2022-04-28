@@ -20,9 +20,9 @@ args = {
     "ACTIONS": 2, # possible actions: jump, duck () and do nothing
     "GAMMA": 0.99, # decay rate of past observations original 0.99
     "OBSERVATION": 2000, # timesteps to observe before training
-    "FINAL_EPSILON": 0.0025, # final value of epsilon
+    "FINAL_EPSILON": 0.0001, # final value of epsilon
     "INITIAL_EPSILON": 1, # starting value of epsilon (initial randomness)
-    "EPSILON_DECAY": 0.999975, #0.999925
+    "EPSILON_DECAY": 0.999999, #0.999925
     "REPLAY_MEMORY": 100000, # number of previous transitions to remember
     "BATCH": 32, # size of minibatch
     "FRAME_PER_ACTION": 1,
