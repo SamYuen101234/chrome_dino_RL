@@ -1,3 +1,14 @@
+# Tasks to be implemented
+
+-[x] Deep Q Network Agent
+-[x] Double Deep Q Network Agent
+-[x] Prioritized Experience Replay
+-[] Real-time Grad-Cam Visualization
+-[] Rainbox
+-[] Policy Gradient
+-[] Actor-Critic Algorithms
+-[] Deployment
+
 # Quick Start
 1. 
 ```
