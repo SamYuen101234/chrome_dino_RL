@@ -12,7 +12,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 class Game():
-    def __init__(self, game_url, chrome_driver_path, init_script):
+    def __init__(self, game_url, chrome_driver_path, init_script, cam_visualization=False):
         init_script = "document.getElementsByClassName('runner-canvas')[0].id = 'runner-canvas'"
         self.getbase64Script = "canvasRunner = document.getElementById('runner-canvas'); \
         return canvasRunner.toDataURL().substring(22)"  
@@ -31,6 +31,7 @@ class Game():
         self.driver.execute_script(init_script) # set id for the canvas
         self.CV_display = self.show_img()  # show the state using opencv instead of the browser
         self.CV_display.__next__() # initiliaze the display coroutine
+        self.cam_visualization = cam_visualization
     
     def screen_shot(self):
         image_b64 = self.driver.execute_script(self.getbase64Script)
@@ -45,12 +46,18 @@ class Game():
         while True:
             screen = (yield)
             window_title = "logs" if graphs else "game_play"
-            cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)        
+            cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
+            if self.cam_visualization:
+                all_white = np.full(screen.shape, 255, dtype='uint8')
+                screen = all_white - screen # reverse the color to white, so the heat map of Grad CAM can be displayed
             imS = cv2.resize(screen, (200, 130)) # the size of the cv2 window
             cv2.imshow(window_title, imS)
             if (cv2.waitKey(1) & 0xFF == ord('q')):
                 cv2.destroyAllWindows()
                 break
+    
+    def save_gif(self):
+        pass
             
     # get current state
     def get_state(self,actions):
@@ -68,27 +75,31 @@ class Game():
         
         return image, reward, is_over #return the Experience tuple
 
-    '''def get_score(self):
-        return self.driver.execute_script("Runner.instance_.distanceMeter.getActualDistance\
-                                          (Math.ceil(Runner.instance_.distanceRan));")'''
-
     def get_crashed(self):
         return self.driver.execute_script("return Runner.instance_.crashed")
+
     def get_playing(self):
         return self.driver.execute_script("return Runner.instance_.playing")
+
     def restart(self):
         self.driver.execute_script("Runner.instance_.restart()")
+
     def press_up(self):
         self.driver.find_element_by_tag_name("body").send_keys(Keys.ARROW_UP)
+
     def press_down(self):
         self.driver.find_element_by_tag_name("body").send_keys(Keys.ARROW_DOWN)
+
     def get_score(self):
         score_array = self.driver.execute_script("return Runner.instance_.distanceMeter.digits")
         score = ''.join(score_array) # the javascript object is of type array with score in the formate[1,0,0] which is 100.
         return int(score)
+
     def pause(self):
         return self.driver.execute_script("return Runner.instance_.stop()")
+
     def resume(self):
         return self.driver.execute_script("return Runner.instance_.play()")
+
     def end(self):
         self.driver.close()
