@@ -13,7 +13,9 @@ from torch import optim
 from torch.utils.tensorboard import SummaryWriter
 
 from models.model import Baseline, DoubleDQN
-from models.train import trainNetwork, init_cache, load_obj
+from models.train import trainNetwork
+from utils.utils import init_cache, load_obj
+from models.test import test_agent
 
 def get_dino_agent(algo):
     if algo == "Baseline":
@@ -54,19 +56,16 @@ if __name__ == '__main__':
     log_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     #tb_writer = tf.summary.create_file_writer(log_dir)
     writer = SummaryWriter(comment=log_dir)
-    game = Game(args.game_url, args.chrome_driver_path, args.init_script)
+    game = Game(args.game_url, args.chrome_driver_path, args.init_script, args.cam_visualization)
     DinoAgent = get_dino_agent(args.algorithm)
     # training the DQN agent
     device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
     #device = torch.device('cpu')
-    agent = DinoAgent(args.img_channels, args.ACTIONS, args.lr, args.BATCH, args.GAMMA, device)
+    agent = DinoAgent(args.img_channels, args.ACTIONS, args.lr, args.weight_decay, args.BATCH, args.GAMMA, device, args.grad_norm_clipping)
     print("Device:",device)
 
-    # criterion = nn.SmoothL1Loss() # we follow pytorch example to use smoothL1Loss not MSE
-    # optimizer = optim.Adam(DQN_agent.parameters(), lr=args.lr)
-
     if args.train == 'train': # train a model from scratch
-        init_cache(args.INITIAL_EPSILON, args.REPLAY_MEMORY) # create a pkl to save the epsilon, current step
+        init_cache(args.INITIAL_EPSILON, args.REPLAY_MEMORY, args.prioritized_replay) # create a pkl to save the epsilon, current step
     else: # continue training a model or ask the agent to play
         print ("Now we load weight")
         #DQN_agent.load_weights(args.checkpoint) # load the model to continue training or play
@@ -80,12 +79,16 @@ if __name__ == '__main__':
         epsilon = 0
         OBSERVE = float('inf')
     game.screen_shot()
-    train = trainNetwork(agent, game, writer, Deque, args.BATCH, device)
-    game.press_up() # start the game
-    train.start(epsilon, step, highest_score, 
-            OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
-            args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
-            args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY)
+    if args.train != 'test':
+        train = trainNetwork(agent, game, writer, Deque, args.BATCH, device)
+        game.press_up() # start the game
+        train.start(epsilon, step, highest_score, 
+                OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
+                args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
+                args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY, args.prioritized_replay)
+    else: # test
+        game.press_up() # start the game
+        test_agent(agent, game, args.ACTIONS, episodes=args.num_test_episode) # test 50 episodes
 
     game.end()
     print("Exit")
