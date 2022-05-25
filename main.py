@@ -1,5 +1,6 @@
 from multiprocessing.sharedctypes import Value
 import os
+from typing import Deque
 from utils.game import Game
 import datetime
 import sys
@@ -73,7 +74,7 @@ if __name__ == '__main__':
         print ("Weight load successfully")
     
     set_up = load_obj("set_up")
-    step, epsilon, Deque, highest_score = set_up['step'], set_up['epsilon'], set_up['D'], set_up['highest_score']
+    epsilon, step, Deque, highest_score = set_up['epsilon'], set_up['step'], set_up['D'], set_up['highest_score']
     OBSERVE = args.OBSERVATION
     if args.train == 'test':
         epsilon = 0
@@ -85,11 +86,14 @@ if __name__ == '__main__':
         train.start(epsilon, step, highest_score, 
                 OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
                 args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
-                args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY, args.prioritized_replay)
+                args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY, args.prioritized_replay, args.TEST_EVERY)
+
+        print('-------------------------------------Finish Training-------------------------------------')
     else: # test
         game.press_up() # start the game
-        test_agent(agent, game, args.ACTIONS, episodes=args.num_test_episode) # test 50 episodes
-
+        with torch.no_grad():
+            test_agent(agent, game, args.ACTIONS, device, episodes=args.num_test_episode) # test 50 episodes
+        print('-------------------------------------Finish Testing-------------------------------------')
     game.end()
     print("Exit")
         
