@@ -14,10 +14,11 @@ args = {
     "img_rows": 80,
     "img_cols": 80,
     "img_channels": 4, #We stack 4 frames
-    "checkpoint" : "./model/model.pth",
+    "checkpoint" : "./weights/double_dqn1.pth",
     "SAVE_EVERY": 100000,
-    "num_test_episode": 50,
+    "num_test_episode": 10,
     "cam_visualization": False, # real-time Grad CAM visualization (XAI)
+    "TEST_EVERY": 50,
 
     # hypyerparameter
     "algorithm": "DoubleDQN",
@@ -25,7 +26,7 @@ args = {
     "ACTIONS": 2, # possible actions: jump, duck () and do nothing
     "GAMMA": 0.99, # decay rate of past observations original 0.99
     "OBSERVATION": 2000, # timesteps to observe before training
-    "FINAL_EPSILON": 1e-4, # final value of epsilon
+    "FINAL_EPSILON": 1e-1, # final value of epsilon
     "INITIAL_EPSILON": 0.75, # starting value of epsilon (initial randomness)
     "EPSILON_DECAY": 0.999975, #0.999925
     "REPLAY_MEMORY": 100000, # number of previous transitions to remember
