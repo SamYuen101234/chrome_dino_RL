@@ -122,7 +122,7 @@ class DoubleDQN(ChromeDinoAgent):
         super().__init__(img_channels, ACTIONS, lr, batch_size, gamma, device)
 
         self.online = nn.Sequential(
-                #nn.BatchNorm2d(4),
+                nn.BatchNorm2d(img_channels),
                 nn.Conv2d(in_channels=img_channels, out_channels=32, kernel_size=8, stride=4),
                 nn.BatchNorm2d(32),
                 nn.ReLU(inplace=True),
