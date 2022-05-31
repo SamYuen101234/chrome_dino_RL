@@ -36,19 +36,20 @@ class trainNetwork:
 
 
     def save(self, epsilon, step, highest_score):
-        self.game.pause() #pause game while saving to filesystem
+        #self.game.pause() # pause game while saving to filesystem
         print("Now we save model")
         self.agent.save_model()
         # set_up_dict = {"epsilon": epsilon, "step": step, "D": self.memory, "highest_score": highest_score}
         # save_obj(set_up_dict, "set_up") # save the buffer to disk, need lots of space if the buffer size is large
-        self.game.resume()
+        #self.game.resume()
 
     def early_stopping(self):
         pass
 
     def start(self, epsilon, step, highest_score, 
             OBSERVE, ACTIONS, EPSILON_DECAY, FINAL_EPSILON, GAMMA,
-            FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY, TRAIN_EVERY, prioritized_replay, TEST_EVERY):
+            FRAME_PER_ACTION, EPISODE, SAVE_EVERY, SYNC_EVERY, TRAIN_EVERY, 
+            prioritized_replay, TEST_EVERY, args):
         last_time = time.time() # for computing fps
         current_episode = 0
         num_action_0 = 0
@@ -158,11 +159,13 @@ class trainNetwork:
 
             # test 
             if current_episode % TEST_EVERY == 0:
-                self.game.restart()
+                self.game.pause() # pause game for learning to open a new random env for testing
                 with torch.no_grad():
-                    avg_test_scores, median_test_scores = test_agent(self.agent.online, self.game, ACTIONS, self.device, episodes=10)
+                    avg_test_scores, median_test_scores = test_agent(self.agent.online, args, self.device)
+
                 self.writer.add_scalar("Test/mean_score", avg_test_scores, current_episode)
                 self.writer.add_scalar("Test/median_score", avg_test_scores, current_episode)
+
                 if avg_test_scores > max_avg_test_score:
                     max_avg_test_score = avg_test_scores
 
@@ -170,6 +173,7 @@ class trainNetwork:
                     max_median_test_score = median_test_scores
                     self.save(epsilon, step, highest_score) # save agent
 
+                self.game.resume()
             # check highest point
             current_score = self.game.get_score()
             if current_score > highest_score:
