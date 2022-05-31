@@ -57,7 +57,7 @@ if __name__ == '__main__':
     log_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     #tb_writer = tf.summary.create_file_writer(log_dir)
     writer = SummaryWriter(comment=log_dir)
-    game = Game(args.game_url, args.chrome_driver_path, args.init_script, args.cam_visualization)
+    
     DinoAgent = get_dino_agent(args.algorithm)
     # training the DQN agent
     device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
@@ -79,21 +79,23 @@ if __name__ == '__main__':
     if args.train == 'test':
         epsilon = 0
         OBSERVE = float('inf')
-    game.screen_shot()
+    
     if args.train != 'test':
+        game = Game(args.game_url, args.chrome_driver_path, args.init_script, args.cam_visualization)
+        game.screen_shot()
+
         train = trainNetwork(agent, game, writer, Deque, args.BATCH, device)
         game.press_up() # start the game
         train.start(epsilon, step, highest_score, 
                 OBSERVE, args.ACTIONS, args.EPSILON_DECAY, args.FINAL_EPSILON, 
                 args.GAMMA, args.FRAME_PER_ACTION, args.EPISODE, 
-                args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY, args.prioritized_replay, args.TEST_EVERY)
-
+                args.SAVE_EVERY, args.SYNC_EVERY, args.TRAIN_EVERY, args.prioritized_replay, args.TEST_EVERY, args)
+        game.end()
         print('-------------------------------------Finish Training-------------------------------------')
     else: # test
-        game.press_up() # start the game
         with torch.no_grad():
-            test_agent(agent, game, args.ACTIONS, device, episodes=args.num_test_episode) # test 50 episodes
+            test_agent(agent, args, device) # test 50 episodes
         print('-------------------------------------Finish Testing-------------------------------------')
-    game.end()
+
     print("Exit")
         
