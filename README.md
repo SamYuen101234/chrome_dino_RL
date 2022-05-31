@@ -43,6 +43,7 @@ The following is a detailed explaination of each approach and their environment 
 * [Link: Original implementation of this baseline in Keras](https://github.com/Paperspace/DinoRunTutorial)
 
 ### Double DQN
+* [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
 
 ### Rainbow
 
