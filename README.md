@@ -15,7 +15,7 @@
 mkdir result
 mkdir weights
 ```
-2. 
+2. Learning or Testing
 ```py
 python3 main.py -c config1
 ```
