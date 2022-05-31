@@ -7,7 +7,6 @@
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
-- [ ] Reward Based Epsilon Decay
 - [ ] Deployment
 
 # Quick Start
