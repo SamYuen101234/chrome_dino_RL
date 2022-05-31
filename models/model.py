@@ -1,4 +1,5 @@
 #from turtle import forward
+from multiprocessing import dummy
 import torch.nn as nn
 import torch
 import copy
@@ -48,6 +49,7 @@ class ChromeDinoAgent:
         total_norm = total_norm ** (1. / 2)
 
         return total_norm
+    
 
 
 # Deep Q-Network
@@ -203,3 +205,4 @@ class DoubleDQN(ChromeDinoAgent):
 
     def last_layer(self):
         pass
+        
