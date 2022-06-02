@@ -10,7 +10,7 @@
 - [ ] Deployment (onnx, opencv4nodejs, nodejs, target FPS for the agent in browser: 50 fps)
 
 <img src="./img/double_dqn/dino8.gif" width="250" height="250" />
-Testing in 50 FPS.
+Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:i:/g/personal/zyuen_connect_ust_hk/Ebvg3AA4vQlGn0Z-dGns94cBrcbu1i0gJXbOLEvIHJ6T4A?e=PqxxjM)
 
 # Quick Start
 1. Create two directories manually or created by main.py automatically
