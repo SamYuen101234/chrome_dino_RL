@@ -7,16 +7,19 @@
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
-- [ ] Reward Based Epsilon Decay
-- [ ] Deployment
+- [ ] Deployment (onnx, opencv4nodejs, nodejs, target FPS for the agent in browser: 50 fps)
+
+<img src="./img/double_dqn/dino8.gif" width="250" height="250" />
+
+Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:i:/g/personal/zyuen_connect_ust_hk/Ebvg3AA4vQlGn0Z-dGns94cBrcbu1i0gJXbOLEvIHJ6T4A?e=4UmoJP).
 
 # Quick Start
-1. 
+1. Create two directories manually or created by main.py automatically
 ```
 mkdir result
 mkdir weights
 ```
-2. 
+2. Learning or Testing
 ```py
 python3 main.py -c config1
 ```
@@ -37,13 +40,50 @@ If you are not familar with Q-learing, you can visit a more fundamental project,
 
 The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur.
 
+### Game Environment in learning
+* No acceleration and no birds in the game for simplicity. If you want them, you can set the acceleration in game.py.
+* Two actions only: up and nothing. There are three actions in the game actually, down to evade the birds if there is acceleration.
+* Reward:
+  * Hit the obstacle: -1
+  * Otherwise: 0.1
+* Using selenium in python to capture the images from the game.
+* Using the version of Chrome Dinosaur in here: 
+
 ### Baseline DQN
 * [Paper: Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)
 * [Paper: Prioritized Experience Replay](https://arxiv.org/pdf/1511.05952.pdf)
 * [Paper: Self-Improving Reactive Agents Based On Reinforcement Learning, Planning and Teaching ](https://link.springer.com/content/pdf/10.1007%2FBF00992699.pdf)
+* [Paper: Human-level control through deep reinforcement learning](https://web.stanford.edu/class/psych209/Readings/MnihEtAlHassibis15NatureControlDeepRL.pdf)
 * [Link: Original implementation of this baseline in Keras](https://github.com/Paperspace/DinoRunTutorial)
 
+
 ### Double DQN
+* [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
+* [Similar project's report: Chrome Dino Run using Reinforcement Learning](https://arxiv.org/abs/2008.06799)
+* All references in [Baseline DQN](#Baseline-DQN) 
+
+### Important Settings and Hyper-parameters
+1. Training GPU: Nvidia RTX 3080 (12GB)
+2. CPU:
+3. Memory: 64 GB (if using prioritize replay buffer, should use at least 45 GB RAM)
+4. Batch size: 32 (if too large, the overfitting will happen)
+5. Buffer size: 100,000
+6. **Final epsilon: 0.1**
+7. FPS:
+   * Slow mode: 14.xx - 18.xx fps (with prioritize replay buffer) 
+   * Fast mode: 50 fps (without prioritizied replay buffer)
+
+#### Result:
+
+##### Epsilon Decay
+For the final epsilon, we believe that it should be the most important hyper-parameters to affect the learning process. We tried 0.03 and 0.01 and 0.0001 before but the agent is not stable. The scores achieved by the agents are very obsolete during learning and the agent in testing is totally garbage if the epsilon is too small. Giving more exploration to the agent in this game seems better. I tried to follow the hyparameter in [this report](https://arxiv.org/abs/2008.06799) first but the problem occurs in what I have mentioned before. The training score (epsilon = 0.0001) is shown in figure . The average and median score of this agent in testing for 20 episodes are 50.xx only.
+
+Later, we tried the final epsilon = 0.1. Although the max score in learning is smaller than 1,000, the test score is very higher when we test the agent for 20 episodes after training 100 episodes each time.
+
+##### FPS
+The FPS in here refers to the number of frames the agent to predict the action per second instead of the FPS of the game rendered by javascript in browser.
+
+Since the computation of prioritized replay buffer is much higher, **our pc** in this experiment can only achieve $\approx 15$ FPS during learning process. If we use normal replay buffer only, the FPS in learning is faster, $\approx 50$ FPS. Higher FPS seems to be more general in lower FPS also but not the reverse. However, to obtain the similar performance, keeping the fps in both training and test is preferred. The FPS in testing is much faster without the learning process. The FPS is $\approx 90$ FPS in our PC, which is even faster than the game rendered by javascript. Thus, we add a sleep() in test function to slow down the FPS as close as learning.
 
 ### Rainbow
 
@@ -51,3 +91,5 @@ The following is a detailed explaination of each approach and their environment 
 
 ### Actor-Critic Algorithms
 [Paper: Actor-Critic Algorithms](https://papers.nips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)
+
+### Grad_CAM Visualization

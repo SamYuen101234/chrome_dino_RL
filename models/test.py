@@ -4,17 +4,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 sys.path.append("../")
-from Grad_CAM.grad_cam import CAM
+#from Grad_CAM.grad_cam import CAM
 from tqdm import tqdm
 from utils.utils import AverageMeter
+from utils.game import Game
 import time
+import imageio
+import mgzip
+import pickle
 
-def test_agent(agent, game, ACTIONS, device, episodes=50):
+def test_agent(agent, args, device):
+    print('-------------------------------------Create a new random env for testing------------------------------------')
+    game = Game(args.game_url, args.chrome_driver_path, args.init_script, args.cam_visualization) # create a random env for testing
     agent.eval()
-    last_time = time.time()
     scores = []
-
-    do_nothing = np.zeros(ACTIONS) # the action array, 0: do nothing, 1: jump, 2: duck
+    
+    game.press_up() # start the game
+    game.screen_shot()
+    last_time = time.time()
+    do_nothing = np.zeros(args.ACTIONS) # the action array, 0: do nothing, 1: jump, 2: duck
     do_nothing[0] = 1 
     x_t, r_0, terminal = game.get_state(do_nothing) # perform this action and get the next state
     # state at t
@@ -24,10 +32,13 @@ def test_agent(agent, game, ACTIONS, device, episodes=50):
     s_t = torch.from_numpy(s_t).float()
     initial_state = copy.deepcopy(s_t)
     avg_fps = AverageMeter()
-    with tqdm(range(episodes), unit="episode", total=len(range(episodes))) as tepoch:
+    
+    with tqdm(range(args.num_test_episode), unit="episode", total=len(range(args.num_test_episode))) as tepoch:
         for episode in tepoch:
+            images = [x_t]
+            states = [s_t]
             while not game.get_crashed():
-                a_t = np.zeros([ACTIONS])
+                a_t = np.zeros([args.ACTIONS])
                 action_values = agent(s_t.to(device))
                 action_idx = torch.argmax(action_values).item()
                 a_t[action_idx] = 1
@@ -36,14 +47,25 @@ def test_agent(agent, game, ACTIONS, device, episodes=50):
                 s_t1 = np.append(x_t1, s_t[:, :3, :, :], axis=1)
                 s_t1 = torch.from_numpy(s_t1)
                 s_t = copy.deepcopy(s_t1)
+                images.append(x_t1[0,0])
+                states.append(s_t)
                 avg_fps.update(1 / (time.time()-last_time), 1)
                 last_time = time.time()
                 tepoch.set_postfix(fps=avg_fps.avg)
-                time.sleep(0.04)
+                
+                
+                time.sleep(0.008) # 0.007: 50 fps for non prioritized replay buffer, 0.04: 14-17fps for prioritized replay buffer
             scores.append(game.get_score())
             s_t = copy.deepcopy(initial_state)
-            game.restart()
+            if args.SAVE_GIF:
+                imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=50)
+            
+            if args.cam_visualization:
+                with mgzip.open("./test_states/dino_states" + str(episode) + ".gz", "wb", thread=4, blocksize=2*10**8) as f:
+                    pickle.dump(states, f) # save for grad_cam
 
-    print('Average scores in {} episodes is {:.2f}'.format(episodes, np.array(scores).mean()))
-    print('Median scores in {} episodes is {:.2f}'.format(episodes, np.median(np.array(scores))))
+            game.restart()
+    game.end()
+    print('Average scores in {} episodes is {:.2f}'.format(args.num_test_episode, np.array(scores).mean()))
+    print('Median scores in {} episodes is {:.2f}'.format(args.num_test_episode, np.median(np.array(scores))))
     return np.array(scores).mean(), np.median(np.array(scores))

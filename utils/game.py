@@ -47,9 +47,9 @@ class Game():
             screen = (yield)
             window_title = "logs" if graphs else "game_play"
             cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
-            if self.cam_visualization:
+            '''if self.cam_visualization:
                 all_white = np.full(screen.shape, 255, dtype='uint8')
-                screen = all_white - screen # reverse the color to white, so the heat map of Grad CAM can be displayed
+                screen = all_white - screen # reverse the color to white, so the heat map of Grad CAM can be displayed'''
             imS = cv2.resize(screen, (200, 130)) # the size of the cv2 window
             cv2.imshow(window_title, imS)
             if (cv2.waitKey(1) & 0xFF == ord('q')):
@@ -60,7 +60,8 @@ class Game():
         pass
             
     # get current state
-    def get_state(self,actions):
+    def get_state(self,actions, grayscale_cam=None):
+        ''' grayscale_cam: the cam result to be visualized during testing '''
         reward = 0.1
         is_over = False #game over
         if actions[1] == 1:
@@ -68,7 +69,10 @@ class Game():
         '''elif actions[1] == 2:
             self.press_down()'''
         image = self.screen_shot()
+        
         self.CV_display.send(image)
+        
+
         if self.get_crashed():
             reward = -1
             is_over = True
