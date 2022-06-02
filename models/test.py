@@ -32,7 +32,7 @@ def test_agent(agent, args, device):
     s_t = torch.from_numpy(s_t).float()
     initial_state = copy.deepcopy(s_t)
     avg_fps = AverageMeter()
-    
+
     with tqdm(range(args.num_test_episode), unit="episode", total=len(range(args.num_test_episode))) as tepoch:
         for episode in tepoch:
             images = [x_t]
@@ -63,6 +63,7 @@ def test_agent(agent, args, device):
             if args.cam_visualization:
                 with mgzip.open("./test_states/dino_states" + str(episode) + ".gz", "wb", thread=4, blocksize=2*10**8) as f:
                     pickle.dump(states, f) # save for grad_cam
+
 
             game.restart()
     game.end()

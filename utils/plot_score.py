@@ -1,4 +1,3 @@
-from cProfile import label
 import tensorflow as tf
 from tqdm import tqdm
 import pandas as pd
@@ -98,6 +97,7 @@ plt.ylabel('Scores')
 plt.legend()
 plt.title('Median Scores of double dqn (every 20 episodes)')
 plt.savefig('../img/double_dqn/median_scores.png')
+
 plt.clf()
 
 plt.plot(min_list1)

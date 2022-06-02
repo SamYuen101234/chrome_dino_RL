@@ -21,6 +21,7 @@ args = {
     "TEST_EVERY": 50,
     "SAVE_GIF": True,
 
+
     # hypyerparameter
     "algorithm": "DoubleDQN",
     "EPISODE": 5000,
