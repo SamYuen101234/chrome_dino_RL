@@ -10,7 +10,7 @@
 - [ ] Deployment (onnx, opencv4nodejs, nodejs)
 
 # Quick Start
-1. 
+1. Create two directories manually or created by main.py automatically
 ```
 mkdir result
 mkdir weights
@@ -44,6 +44,8 @@ The following is a detailed explaination of each approach and their environment 
 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
+
+##### Result:
 
 ### Rainbow
 
