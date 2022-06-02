@@ -54,8 +54,8 @@ The following is a detailed explaination of each approach and their environment 
 3. Buffer size: 100,000
 4. **Final epsilon: 0.1**
 5. FPS:
-  * slow mode: 14.xx - 18.xx fps (with prioritize replay buffer)
-  * fast mode: 50 fps (without prioritizied replay buffer)
+* slow mode: 14.xx - 18.xx fps (with prioritize replay buffer)
+* fast mode: 50 fps (without prioritizied replay buffer)
 
 #### Result:
 
