@@ -7,7 +7,7 @@
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
-- [ ] Deployment
+- [ ] Deployment (onnx, opencv4nodejs, nodejs)
 
 # Quick Start
 1. 
