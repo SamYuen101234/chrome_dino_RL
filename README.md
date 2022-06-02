@@ -76,8 +76,7 @@ The following is a detailed explaination of each approach and their environment 
 #### Result:
 
 
-<img src="./img/double_dqn/max_scores.png" width="400" height="300" />
-<img src="./img/double_dqn/mean_scores.png" width="400" height="300" />
+<img src="./img/double_dqn/max_scores.png" width="400" height="300" /><img src="./img/double_dqn/mean_scores.png" width="400" height="300" />
 <img src="./img/double_dqn/median_scores.png" width="400" height="300" />
 
 
