@@ -75,6 +75,12 @@ The following is a detailed explaination of each approach and their environment 
 
 #### Result:
 
+
+<img src="./img/double_dqn/max_scores.png" width="400" height="300" />
+<img src="./img/double_dqn/mean_scores.png" width="400" height="300" />
+<img src="./img/double_dqn/median_scores.png" width="400" height="300" />
+
+
 ##### Epsilon Decay
 For the final epsilon, we believe that it should be the most important hyper-parameters to affect the learning process. We tried 0.03 and 0.01 and 0.0001 before but the agent is not stable. The scores achieved by the agents are very obsolete during learning and the agent in testing is totally garbage if the epsilon is too small. Giving more exploration to the agent in this game seems better. I tried to follow the hyparameter in [this report](https://arxiv.org/abs/2008.06799) first but the problem occurs in what I have mentioned before. The training score (epsilon = 0.0001) is shown in figure . The average and median score of this agent in testing for 20 episodes are 50.xx only.
 
