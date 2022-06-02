@@ -46,7 +46,7 @@ The following is a detailed explaination of each approach and their environment 
 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
-* [Similar project's report: Chrome Dino Run using Reinforcement Learning)(https://arxiv.org/abs/2008.06799)
+* [Similar project's report: Chrome Dino Run using Reinforcement Learning](https://arxiv.org/abs/2008.06799)
 
 ### Important Settings and Hyper-parameters
 1. Training GPU: Nvidia RTX 3080 (12GB)
