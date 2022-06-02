@@ -36,7 +36,14 @@ If you are not familar with Q-learing, you can visit a more fundamental project,
 
 The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur.
 
-
+### Game Environment in learning
+* No acceleration and no birds in the game for simplicity. If you want them, you can set the acceleration in game.py.
+* Two actions only: up and nothing. There are three actions in the game actually, down to evade the birds if there is acceleration.
+* Reward:
+  * Hit the obstacle: -1
+  * Otherwise: 0.1
+* Using selenium in python to capture the images from the game.
+* Using the version of Chrome Dinosaur in here: 
 
 ### Baseline DQN
 * [Paper: Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)
