@@ -50,10 +50,12 @@ The following is a detailed explaination of each approach and their environment 
 
 ### Important Settings and Hyper-parameters
 1. Training GPU: Nvidia RTX 3080 (12GB)
-2. Batch size: 32 (if too large, the overfitting will happen)
-3. Buffer size: 100,000
-4. **Final epsilon: 0.1**
-5. FPS:
+2. CPU:
+3. Memory: 64 GB (if using prioritize replay buffer, should use at least 45 GB RAM)
+4. Batch size: 32 (if too large, the overfitting will happen)
+5. Buffer size: 100,000
+6. **Final epsilon: 0.1**
+7. FPS:
    * Slow mode: 14.xx - 18.xx fps (with prioritize replay buffer) 
    * Fast mode: 50 fps (without prioritizied replay buffer)
 
@@ -65,8 +67,9 @@ For the final epsilon, we believe that it should be the most important hyper-par
 Later, we tried the final epsilon = 0.1. Although the max score in learning is smaller than 1,000, the test score is very higher when we test the agent for 20 episodes after training 100 episodes each time.
 
 ##### FPS
+The FPS in here refers to the number of frames the agent to predict the action per second instead of the FPS of the game rendered by javascript in browser.
 
-
+Since the computation of prioritized replay buffer is much higher, **our pc** in this experiment can only achieve $$/approx 15$$ FPS during learning process. If we use normal replay buffer only, the FPS in learning is faster, $$/approx 50$$ FPS. Higher FPS seems to be more general in lower FPS also but not the reverse. However, to obtain the similar performance, keeping the fps in both training and test is preferred. The FPS in testing is much faster without the learning process. The FPS is $$\approx 90$$ FPS in our PC, which is even faster than the game rendered by javascript. Thus, we add a sleep() in test function to slow down the FPS as close as learning.
 
 ### Rainbow
 
