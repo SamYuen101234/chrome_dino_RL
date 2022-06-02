@@ -69,7 +69,7 @@ Later, we tried the final epsilon = 0.1. Although the max score in learning is s
 ##### FPS
 The FPS in here refers to the number of frames the agent to predict the action per second instead of the FPS of the game rendered by javascript in browser.
 
-Since the computation of prioritized replay buffer is much higher, **our pc** in this experiment can only achieve $$/approx 15$$ FPS during learning process. If we use normal replay buffer only, the FPS in learning is faster, $$/approx 50$$ FPS. Higher FPS seems to be more general in lower FPS also but not the reverse. However, to obtain the similar performance, keeping the fps in both training and test is preferred. The FPS in testing is much faster without the learning process. The FPS is $$\approx 90$$ FPS in our PC, which is even faster than the game rendered by javascript. Thus, we add a sleep() in test function to slow down the FPS as close as learning.
+Since the computation of prioritized replay buffer is much higher, **our pc** in this experiment can only achieve $/approx 15$ FPS during learning process. If we use normal replay buffer only, the FPS in learning is faster, $/approx 50$ FPS. Higher FPS seems to be more general in lower FPS also but not the reverse. However, to obtain the similar performance, keeping the fps in both training and test is preferred. The FPS in testing is much faster without the learning process. The FPS is $\approx 90$ FPS in our PC, which is even faster than the game rendered by javascript. Thus, we add a sleep() in test function to slow down the FPS as close as learning.
 
 ### Rainbow
 
