@@ -42,7 +42,9 @@ The following is a detailed explaination of each approach and their environment 
 * [Paper: Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)
 * [Paper: Prioritized Experience Replay](https://arxiv.org/pdf/1511.05952.pdf)
 * [Paper: Self-Improving Reactive Agents Based On Reinforcement Learning, Planning and Teaching ](https://link.springer.com/content/pdf/10.1007%2FBF00992699.pdf)
+* [Paper: Human-level control through deep reinforcement learning](https://web.stanford.edu/class/psych209/Readings/MnihEtAlHassibis15NatureControlDeepRL.pdf)
 * [Link: Original implementation of this baseline in Keras](https://github.com/Paperspace/DinoRunTutorial)
+
 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
