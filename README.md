@@ -36,6 +36,8 @@ If you are not familar with Q-learing, you can visit a more fundamental project,
 
 The following is a detailed explaination of each approach and their environment setting in Chrome Dinosaur.
 
+
+
 ### Baseline DQN
 * [Paper: Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)
 * [Paper: Prioritized Experience Replay](https://arxiv.org/pdf/1511.05952.pdf)
@@ -45,7 +47,15 @@ The following is a detailed explaination of each approach and their environment 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
 
-##### Result:
+### Settings
+1. Training GPU: Nvidia RTX 3080 (12GB)
+2. Batch size: 32
+3. Initial epsilon: 1
+4. Final epsilon: 0.1 (*)
+
+#### Result:
+
+
 
 ### Rainbow
 
