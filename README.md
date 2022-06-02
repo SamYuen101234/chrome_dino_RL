@@ -46,14 +46,25 @@ The following is a detailed explaination of each approach and their environment 
 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
+* [Similar project's report: Chrome Dino Run using Reinforcement Learning)(https://arxiv.org/abs/2008.06799)
 
-### Settings
+### Important Settings and Hyper-parameters
 1. Training GPU: Nvidia RTX 3080 (12GB)
-2. Batch size: 32
-3. Initial epsilon: 1
-4. Final epsilon: 0.1 (*)
+2. Batch size: 32 (if too large, the overfitting will happen)
+3. Buffer size: 100,000
+4. **Final epsilon: 0.1**
+5. FPS:
+  * slow mode: 14.xx - 18.xx fps (with prioritize replay buffer)
+  * fast mode: 50 fps (without prioritizied replay buffer)
 
 #### Result:
+
+##### Epsilon Decay
+For the final epsilon, we believe that it should be the most important hyper-parameters to affect the learning process. We tried 0.03 and 0.01 and 0.0001 before but the agent is not stable. The scores achieved by the agents are very obsolete during learning and the agent in testing is totally garbage if the epsilon is too small. Giving more exploration to the agent in this game seems better. I tried to follow the hyparameter in [this report](https://arxiv.org/abs/2008.06799) first but the problem occurs in what I have mentioned before. The training score (epsilon = 0.0001) is shown in figure . The average and median score of this agent in testing for 20 episodes are 50.xx only.
+
+Later, we tried the final epsilon = 0.1. Although the max score in learning is smaller than 1,000, the test score is very higher when we test the agent for 20 episodes after training 100 episodes each time.
+
+##### FPS
 
 
 
