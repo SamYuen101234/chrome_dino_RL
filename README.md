@@ -7,7 +7,7 @@
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
-- [ ] Deployment (onnx, opencv4nodejs, nodejs)
+- [ ] Deployment (onnx, opencv4nodejs, nodejs, target FPS for the agent in browser: 50 fps)
 
 # Quick Start
 1. Create two directories manually or created by main.py automatically
