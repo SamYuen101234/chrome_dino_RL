@@ -9,7 +9,7 @@
 - [ ] Actor-Critic Algorithms
 - [ ] Deployment (onnx, opencv4nodejs, nodejs, target FPS for the agent in browser: 50 fps)
 
-![GIF](./img/double_dqn/dino8.gif)
+![GIF](./img/double_dqn/dino8.gif=250x)
 
 # Quick Start
 1. Create two directories manually or created by main.py automatically
