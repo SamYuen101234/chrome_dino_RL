@@ -13,6 +13,10 @@
 
 Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:i:/g/personal/zyuen_connect_ust_hk/Ebvg3AA4vQlGn0Z-dGns94cBrcbu1i0gJXbOLEvIHJ6T4A?e=4UmoJP).
 
+<img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
+
+Using Grad_CAM, an explainable/interpretable AI approach for deep learning, to examine whether the agent treats the game as human. See [Grad_CAM Visualization](Grad_CAM-Visualization) for details.
+
 # Quick Start
 1. Create two directories manually or created by main.py automatically
 ```
@@ -28,7 +32,7 @@ python3 main.py -c config1
 
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning because of its easy rules and environment setting. Although the game is easy for human but it is difficult for computer agent to learning it. Through this project, We will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
-* [Baseline DQN](#Baseline-DQN) 
+* [Baseline DQN](Baseline-DQN) 
 * [Double DQN](Double-DQN)
 * [Rainbow](Rainbow)
 * [Policy Gradient](Policy-Gradient)
@@ -98,3 +102,4 @@ Since the computation of prioritized replay buffer is much higher, **our pc** in
 [Paper: Actor-Critic Algorithms](https://papers.nips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)
 
 ### Grad_CAM Visualization
+<img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
