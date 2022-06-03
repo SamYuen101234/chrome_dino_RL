@@ -3,7 +3,7 @@
 - [x] Deep Q Network Agent
 - [x] Double Deep Q Network Agent
 - [x] Prioritized Experience Replay
-- [x] Real-time Grad-Cam Visualization
+- [x] Grad-Cam Visualization
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
@@ -103,3 +103,24 @@ Since the computation of prioritized replay buffer is much higher, **our pc** in
 
 ### Grad_CAM Visualization
 <img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
+
+* [Paper: Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization](https://arxiv.org/abs/1610.02391)
+* [Paper of Grad-CAM's demo](http://gradcam.cloudcv.org)
+* [The Grad-CAM package in python](https://github.com/jacobgil/pytorch-grad-cam)
+
+Since the computation time of Grad-CAM is very long, every second can only produce one heat map only even though we use GPU to speed up. Therefore, it is hard to produce real-time Gram-CAM images during test. Instead of visualizing the heat maps in real time, we save the states during testing and produce the Grad-Cam heat maps after testing.
+
+1. Set *cam_visualization* in config1.py to be True. The states from the game will be save to the folder, test_states, for each testing episode.
+```json
+"cam_visualization": True
+```
+2. Create heat_maps in GIF
+```py
+python3 visualize_CAM.py -c config1
+```
+You can choose which testing episode you want to generate the heat maps under visualize_CAM
+```py
+with open('./test_states/dino_states7.pickle', 'rb') as f:   # the 7-th test episode
+```
+
+The warmer area in the visualization is the area with higher weights, i.e. larger impact for these area's pixels to the final output of the agent. From the heat maps' visualization, it is very obvious that the area of the dinosaur and the obstacles always has higher impacts to the agent's action.
