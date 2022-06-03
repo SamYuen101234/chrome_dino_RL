@@ -9,7 +9,7 @@
 - [ ] Actor-Critic Algorithms
 - [ ] Deployment (onnx, opencv4nodejs, nodejs, target FPS for the agent in browser: 50 fps)
 
-<img src="./img/double_dqn/dino8.gif" width="250" height="250" />
+<img src="./img/double_dqn/dino8.gif" width="250" height="250" /><img src="./img/double_dqn/dino_canvas2.gif" width="600" height="150" />
 
 Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:f:/g/personal/zyuen_connect_ust_hk/Ej2-jJx7EKNCsIJdjTESonEBtwS6whKM7QThAW7I9VKlKA?e=eJKdcK).
 
