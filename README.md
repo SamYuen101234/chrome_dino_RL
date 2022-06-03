@@ -3,7 +3,7 @@
 - [x] Deep Q Network Agent
 - [x] Double Deep Q Network Agent
 - [x] Prioritized Experience Replay
-- [ ] Real-time Grad-Cam Visualization
+- [x] Real-time Grad-Cam Visualization
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
@@ -32,7 +32,7 @@ python3 main.py -c config1
 
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning because of its easy rules and environment setting. Although the game is easy for human but it is difficult for computer agent to learning it. Through this project, We will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
-* [Baseline DQN](Baseline-DQN) 
+* [Baseline DQN](#user-content-baseline-dqn) 
 * [Double DQN](Double-DQN)
 * [Rainbow](Rainbow)
 * [Policy Gradient](Policy-Gradient)
