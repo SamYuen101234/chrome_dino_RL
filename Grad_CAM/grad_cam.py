@@ -19,6 +19,6 @@ def CAM(agent, state, action, use_cuda=True):
     grayscale_cam = cam(input_tensor=state, targets=targets)
     grayscale_cam = grayscale_cam[0, :]
     visualization = show_cam_on_image((state[0,0,:,:].unsqueeze(2).cpu().numpy()/255).astype('float32'), grayscale_cam, use_rgb=True)
-    Image.fromarray(visualization)
+    #Image.fromarray(visualization)
 
-    return grayscale_cam
+    return visualization

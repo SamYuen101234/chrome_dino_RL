@@ -10,7 +10,6 @@ from utils.utils import AverageMeter
 from utils.game import Game
 import time
 import imageio
-import mgzip
 import pickle
 
 def test_agent(agent, args, device):
@@ -37,6 +36,7 @@ def test_agent(agent, args, device):
         for episode in tepoch:
             images = [x_t]
             states = [s_t]
+            actions = [0]
             while not game.get_crashed():
                 a_t = np.zeros([args.ACTIONS])
                 action_values = agent(s_t.to(device))
@@ -49,6 +49,7 @@ def test_agent(agent, args, device):
                 s_t = copy.deepcopy(s_t1)
                 images.append(x_t1[0,0])
                 states.append(s_t)
+                actions.append(action_idx)
                 avg_fps.update(1 / (time.time()-last_time), 1)
                 last_time = time.time()
                 tepoch.set_postfix(fps=avg_fps.avg)
@@ -61,8 +62,8 @@ def test_agent(agent, args, device):
                 imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=50)
             
             if args.cam_visualization:
-                with mgzip.open("./test_states/dino_states" + str(episode) + ".gz", "wb", thread=4, blocksize=2*10**8) as f:
-                    pickle.dump(states, f) # save for grad_cam
+                with open("./test_states/dino_states" + str(episode) + ".pickle", "wb") as f:
+                    pickle.dump({'states': states, 'actions': actions}, f) # save for grad_cam
 
 
             game.restart()
