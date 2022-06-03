@@ -59,7 +59,7 @@ def test_agent(agent, args, device):
             scores.append(game.get_score())
             s_t = copy.deepcopy(initial_state)
             if args.SAVE_GIF:
-                imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=50)
+                imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=30)
             
             if args.cam_visualization:
                 with open("./test_states/dino_states" + str(episode) + ".pickle", "wb") as f:
