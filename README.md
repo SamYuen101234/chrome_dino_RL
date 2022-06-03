@@ -15,7 +15,7 @@ Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-m
 
 <img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
 
-Using Grad_CAM, an explainable/interpretable AI approach for deep learning, to examine whether the agent treats the game as human. See [Grad_CAM Visualization](Grad_CAM-Visualization) for details.
+Using Grad_CAM, an explainable/interpretable AI approach for deep learning, to examine whether the agent treats the game as human. See [Grad_CAM Visualization](#user-content-grad_cam-visualization) for details.
 
 # Quick Start
 1. Create two directories manually or created by main.py automatically
@@ -33,10 +33,10 @@ python3 main.py -c config1
 Chome dinosaur is a game very suitable for beginners in deep reinforcement learning because of its easy rules and environment setting. Although the game is easy for human but it is difficult for computer agent to learning it. Through this project, We will not only show the result of baseline DQN, but also compare its results with double DQN, Rainbow, policy gradient and Actor-Critic Algorithms.
 
 * [Baseline DQN](#user-content-baseline-dqn) 
-* [Double DQN](Double-DQN)
-* [Rainbow](Rainbow)
-* [Policy Gradient](Policy-Gradient)
-* [Actor-Critic Algorithms](Actor-Critic-Algorithms)
+* [Double DQN](#user-content-Double-DQN)
+* [Rainbow](#user-content-Rainbow)
+* [Policy Gradient](#user-content-Policy-Gradient)
+* [Actor-Critic Algorithms](#user-content-Actor-Critic-Algorithms)
 
 We have also implemented a real-time browser demo here.
 If you are not familar with Q-learing, you can visit a more fundamental project, Q-learning for Tic-Tac-Toe (GitHub Repo) and the real-time interactive streamlit demo.
@@ -64,7 +64,7 @@ The following is a detailed explaination of each approach and their environment 
 ### Double DQN
 * [Reference code: TRAIN A MARIO-PLAYING RL AGENT from Pytorch Official](https://pytorch.org/tutorials/intermediate/mario_rl_tutorial.html)
 * [Similar project's report: Chrome Dino Run using Reinforcement Learning](https://arxiv.org/abs/2008.06799)
-* All references in [Baseline DQN](#Baseline-DQN) 
+* All references in [Baseline DQN](#user-content-baseline-dqn) 
 
 ### Important Settings and Hyper-parameters
 1. Training GPU: Nvidia RTX 3080 (12GB)
