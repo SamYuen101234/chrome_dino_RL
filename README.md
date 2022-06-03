@@ -3,7 +3,7 @@
 - [x] Deep Q Network Agent
 - [x] Double Deep Q Network Agent
 - [x] Prioritized Experience Replay
-- [x] Grad-Cam Visualization
+- [x] Grad-Cam Visualization (Double DQN)
 - [ ] Rainbox
 - [ ] Policy Gradient
 - [ ] Actor-Critic Algorithms
@@ -15,7 +15,7 @@ Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-m
 
 <img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
 
-Using Grad_CAM, an explainable/interpretable AI approach for deep learning, to examine whether the agent treats the game as human. See [Grad_CAM Visualization](#user-content-grad_cam-visualization) for details.
+Using Grad_CAM, an explainable/interpretable AI approach for deep learning, to examine whether the agent treats the game as human. See [Grad_CAM Visualization](#user-content-grad_cam-visualization-double-dqn) for details.
 
 # Quick Start
 1. Create two directories manually or created by main.py automatically
@@ -101,7 +101,7 @@ Since the computation of prioritized replay buffer is much higher, **our pc** in
 ### Actor-Critic Algorithms
 [Paper: Actor-Critic Algorithms](https://papers.nips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf)
 
-### Grad_CAM Visualization
+### Grad_CAM Visualization in Double DQN
 <img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
 
 * [Paper: Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization](https://arxiv.org/abs/1610.02391)
