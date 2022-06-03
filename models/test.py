@@ -35,6 +35,7 @@ def test_agent(agent, args, device):
     with tqdm(range(args.num_test_episode), unit="episode", total=len(range(args.num_test_episode))) as tepoch:
         for episode in tepoch:
             images = [x_t]
+            canvas_images = [game.canvas_image]
             states = [s_t]
             actions = [0]
             while not game.get_crashed():
@@ -48,6 +49,7 @@ def test_agent(agent, args, device):
                 s_t1 = torch.from_numpy(s_t1)
                 s_t = copy.deepcopy(s_t1)
                 images.append(x_t1[0,0])
+                canvas_images.append(game.canvas_image)
                 states.append(s_t)
                 actions.append(action_idx)
                 avg_fps.update(1 / (time.time()-last_time), 1)
@@ -55,11 +57,12 @@ def test_agent(agent, args, device):
                 tepoch.set_postfix(fps=avg_fps.avg)
                 
                 
-                time.sleep(0.008) # 0.007: 50 fps for non prioritized replay buffer, 0.04: 14-17fps for prioritized replay buffer
+                time.sleep(0.005) # 0.007: 50 fps for non prioritized replay buffer, 0.04: 14-17fps for prioritized replay buffer
             scores.append(game.get_score())
             s_t = copy.deepcopy(initial_state)
             if args.SAVE_GIF:
                 imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=30)
+                imageio.mimsave('./img/double_dqn/dino_canvas' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(canvas_images)], fps=30)
             
             if args.cam_visualization:
                 with open("./test_states/dino_states" + str(episode) + ".pickle", "wb") as f:
