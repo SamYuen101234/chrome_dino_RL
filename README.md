@@ -11,7 +11,7 @@
 
 <img src="./img/double_dqn/dino8.gif" width="250" height="250" />
 
-Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:i:/g/personal/zyuen_connect_ust_hk/Ebvg3AA4vQlGn0Z-dGns94cBrcbu1i0gJXbOLEvIHJ6T4A?e=4UmoJP).
+Testing in 50 FPS. A higher scores' version in [OneDrive](https://hkustconnect-my.sharepoint.com/:f:/g/personal/zyuen_connect_ust_hk/Ej2-jJx7EKNCsIJdjTESonEBtwS6whKM7QThAW7I9VKlKA?e=eJKdcK).
 
 <img src="./img/double_dqn/dino_grad_cam.gif" width="250" height="250" />
 
