@@ -10,6 +10,7 @@ import cv2
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+import copy
 
 class Game():
     def __init__(self, game_url, chrome_driver_path, init_script, cam_visualization=False):
@@ -37,6 +38,7 @@ class Game():
         image_b64 = self.driver.execute_script(self.getbase64Script)
         np_img = np.array(Image.open(BytesIO(base64.b64decode(image_b64))))
         np_img = cv2.cvtColor(np_img, cv2.COLOR_BGR2GRAY) # change 4 channels to 1 gray channel
+        self.canvas_image = copy.deepcopy(np_img)
         np_img = cv2.resize(np_img, (80,80)) # resize the image to smaller
         #np_img = Image.fromarray(np_img)
         #np_img = np_img.save('./img/'+str(i)+'.png')
@@ -47,9 +49,6 @@ class Game():
             screen = (yield)
             window_title = "logs" if graphs else "game_play"
             cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
-            '''if self.cam_visualization:
-                all_white = np.full(screen.shape, 255, dtype='uint8')
-                screen = all_white - screen # reverse the color to white, so the heat map of Grad CAM can be displayed'''
             imS = cv2.resize(screen, (200, 130)) # the size of the cv2 window
             cv2.imshow(window_title, imS)
             if (cv2.waitKey(1) & 0xFF == ord('q')):
