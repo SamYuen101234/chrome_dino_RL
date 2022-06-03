@@ -17,9 +17,10 @@ args = {
     "checkpoint" : "./weights/double_dqn_high1.pth",
     "SAVE_EVERY": 100000,
     "num_test_episode": 20,
-    "cam_visualization": True, # real-time Grad CAM visualization (XAI)
+    "cam_visualization": False, # real-time Grad CAM visualization (XAI)
     "TEST_EVERY": 50,
     "SAVE_GIF": True,
+    "SLEEP": 0.007, # using sleep() to control the fps in testing
 
 
     # hypyerparameter

@@ -57,12 +57,12 @@ def test_agent(agent, args, device):
                 tepoch.set_postfix(fps=avg_fps.avg)
                 
                 
-                time.sleep(0.005) # 0.007: 50 fps for non prioritized replay buffer, 0.04: 14-17fps for prioritized replay buffer
+                time.sleep(args.SLEEP) # 0.007: 50 fps for non prioritized replay buffer, 0.04: 14-17fps for prioritized replay buffer
             scores.append(game.get_score())
             s_t = copy.deepcopy(initial_state)
             if args.SAVE_GIF:
-                imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=30)
-                imageio.mimsave('./img/double_dqn/dino_canvas' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(canvas_images)], fps=30)
+                imageio.mimsave('./img/double_dqn/dino' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(images)], fps=50)
+                imageio.mimsave('./img/double_dqn/dino_canvas' + str(episode) + '.gif', [np.array(img) for i, img in enumerate(canvas_images)], fps=50)
             
             if args.cam_visualization:
                 with open("./test_states/dino_states" + str(episode) + ".pickle", "wb") as f:
