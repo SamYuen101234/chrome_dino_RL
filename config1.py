@@ -16,10 +16,10 @@ args = {
     "img_channels": 4, #We stack 4 frames
     "checkpoint" : "./weights/double_dqn_high1.pth",
     "SAVE_EVERY": 100000,
-    "num_test_episode": 20,
+    "num_test_episode": 100,
     "cam_visualization": False, # real-time Grad CAM visualization (XAI)
     "TEST_EVERY": 50,
-    "SAVE_GIF": True,
+    "SAVE_GIF": False,
     "SLEEP": 0.007, # using sleep() to control the fps in testing
 
 
@@ -41,6 +41,7 @@ args = {
     "TRAIN_EVERY": 3,
     "prioritized_replay": False, # FPS is slower than unprioritized and needs larger RAM (>40GB) otherwise killed
     "grad_norm_clipping": 10, # prevent gradien explosion
+
 
 
 

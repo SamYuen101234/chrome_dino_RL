@@ -1,10 +1,8 @@
 import copy
 import torch
-import matplotlib.pyplot as plt
 import numpy as np
 import sys
 sys.path.append("../")
-#from Grad_CAM.grad_cam import CAM
 from tqdm import tqdm
 from utils.utils import AverageMeter
 from utils.game import Game
@@ -34,10 +32,13 @@ def test_agent(agent, args, device):
 
     with tqdm(range(args.num_test_episode), unit="episode", total=len(range(args.num_test_episode))) as tepoch:
         for episode in tepoch:
-            images = [x_t]
-            canvas_images = [game.canvas_image]
-            states = [s_t]
-            actions = [0]
+            if args.SAVE_GIF:
+                images = [x_t]
+                canvas_images = [game.canvas_image]
+
+            if args.cam_visualization:
+                states = [s_t]
+                actions = [0]
             while not game.get_crashed():
                 a_t = np.zeros([args.ACTIONS])
                 action_values = agent(s_t.to(device))
@@ -48,10 +49,12 @@ def test_agent(agent, args, device):
                 s_t1 = np.append(x_t1, s_t[:, :3, :, :], axis=1)
                 s_t1 = torch.from_numpy(s_t1)
                 s_t = copy.deepcopy(s_t1)
-                images.append(x_t1[0,0])
-                canvas_images.append(game.canvas_image)
-                states.append(s_t)
-                actions.append(action_idx)
+                if args.SAVE_GIF:
+                    images.append(x_t1[0,0])
+                    canvas_images.append(game.canvas_image)
+                if args.cam_visualization:
+                    states.append(s_t)
+                    actions.append(action_idx)
                 avg_fps.update(1 / (time.time()-last_time), 1)
                 last_time = time.time()
                 tepoch.set_postfix(fps=avg_fps.avg)
@@ -73,4 +76,5 @@ def test_agent(agent, args, device):
     game.end()
     print('Average scores in {} episodes is {:.2f}'.format(args.num_test_episode, np.array(scores).mean()))
     print('Median scores in {} episodes is {:.2f}'.format(args.num_test_episode, np.median(np.array(scores))))
+    np.save('./test_scores/' + args.algorithm + '.npy', scores)
     return np.array(scores).mean(), np.median(np.array(scores))
